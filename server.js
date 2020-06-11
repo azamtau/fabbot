@@ -10,18 +10,18 @@ const Agent = require('socks5-https-client/lib/Agent')
 //const schedule = require('node-schedule');
 
 process.env["TELEGRAM_API_TOKEN"] = "1216229929:AAFB31vpDynycvs_MGU4DEwExQMN19jrWPI";
-process.env["PROXY_SOCKS5_HOST"] = '127.0.0.1';
-process.env["PROXY_SOCKS5_PORT"] = '9150';
+// process.env["PROXY_SOCKS5_HOST"] = '127.0.0.1';
+// process.env["PROXY_SOCKS5_PORT"] = '9150';
 
 const bot = new TelegramBot(process.env.TELEGRAM_API_TOKEN, {
 	polling: true,
-	request: {
-		agentClass: Agent,
-		agentOptions: {
-			socksHost: process.env.PROXY_SOCKS5_HOST,
-			socksPort: parseInt(process.env.PROXY_SOCKS5_PORT),
-		}
-	}
+	// request: {
+	// 	agentClass: Agent,
+	// 	agentOptions: {
+	// 		socksHost: process.env.PROXY_SOCKS5_HOST,
+	// 		socksPort: parseInt(process.env.PROXY_SOCKS5_PORT),
+	// 	}
+	// }
 })
 
 const dbSt = new Datastore({ filename: './data/students', autoload: true });
@@ -65,8 +65,8 @@ let lessons = [
         }
 ];
 
-// dbSetup(lessons, dbLs);
-// dbSetup(studs, dbSt);
+dbSetup(lessons, dbLs);
+dbSetup(studs, dbSt);
 
 function dbSetup(docs, db) {
     for (let doc of docs) {
