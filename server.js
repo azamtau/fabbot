@@ -135,7 +135,7 @@ bot.onText(/\/last/, (msg, match) => {
 });
 
 app.listen(PORT, () => {
-    console.log(`Server listening on port ${port}!`);
+    //console.log(`Server listening on port ${port}!`);
 });
 
 // deploy heroku
