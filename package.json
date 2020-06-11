@@ -1,0 +1,30 @@
+{
+  "name": "fabbot",
+  "version": "1.0.0",
+  "description": "cs101 fab bot",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/azamtau/fabbot.git"
+  },
+  "keywords": [
+    "telegram",
+    "fablab",
+    "node"
+  ],
+  "author": "Azamat Tavitov",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/azamtau/fabbot/issues"
+  },
+  "homepage": "https://github.com/azamtau/fabbot#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "nedb": "^1.8.0",
+    "node-telegram-bot-api": "^0.50.0",
+    "socks5-https-client": "^1.2.1"
+  }
+}
