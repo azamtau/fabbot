@@ -13,6 +13,8 @@ process.env["TELEGRAM_API_TOKEN"] = "1216229929:AAFB31vpDynycvs_MGU4DEwExQMN19jr
 // process.env["PROXY_SOCKS5_HOST"] = '127.0.0.1';
 // process.env["PROXY_SOCKS5_PORT"] = '9150';
 
+const PORT = process.env.PORT || 3000; 
+
 const bot = new TelegramBot(process.env.TELEGRAM_API_TOKEN, {
 	polling: true,
 	// request: {
@@ -27,8 +29,7 @@ const bot = new TelegramBot(process.env.TELEGRAM_API_TOKEN, {
 const dbSt = new Datastore({ filename: './data/students', autoload: true });
 const dbLs = new Datastore({ filename: './data/lessons', autoload: true });
 
-let studs = 
-    [
+let studs = [
         {
             fullname: "Katya Petrova",
             username: "kate",
@@ -133,6 +134,9 @@ bot.onText(/\/last/, (msg, match) => {
     });
 });
 
+app.listen(PORT, () => {
+    console.log(`Server listening on port ${port}!`);
+});
 
 // deploy heroku
 
