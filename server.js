@@ -7,7 +7,7 @@ const express = require('express');
 const app = express();
 
 const Agent = require('socks5-https-client/lib/Agent') 
-require('dotenv').config()
+//require('dotenv').config()
 
 process.env["TELEGRAM_API_TOKEN"] = process.env.BOT_TOKEN;
 // process.env["PROXY_SOCKS5_HOST"] = '127.0.0.1';
