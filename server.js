@@ -7,9 +7,9 @@ const express = require('express');
 const app = express();
 
 const Agent = require('socks5-https-client/lib/Agent') 
-//const schedule = require('node-schedule');
+require('dotenv').config()
 
-process.env["TELEGRAM_API_TOKEN"] = "1216229929:AAFB31vpDynycvs_MGU4DEwExQMN19jrWPI";
+process.env["TELEGRAM_API_TOKEN"] = process.env.BOT_TOKEN;
 // process.env["PROXY_SOCKS5_HOST"] = '127.0.0.1';
 // process.env["PROXY_SOCKS5_PORT"] = '9150';
 
@@ -66,8 +66,8 @@ let lessons = [
         }
 ];
 
-dbSetup(lessons, dbLs);
-dbSetup(studs, dbSt);
+// dbSetup(lessons, dbLs);
+// dbSetup(studs, dbSt);
 
 function dbSetup(docs, db) {
     for (let doc of docs) {
