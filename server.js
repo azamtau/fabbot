@@ -8,6 +8,8 @@ const app = express();
 
 const Agent = require('socks5-https-client/lib/Agent') 
 //require('dotenv').config()
+const fetch = require('node-fetch');
+
 
 process.env["TELEGRAM_API_TOKEN"] = process.env.BOT_TOKEN;
 // process.env["PROXY_SOCKS5_HOST"] = '127.0.0.1';
