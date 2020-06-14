@@ -8,7 +8,7 @@ const app = express();
 
 const Agent = require('socks5-https-client/lib/Agent') 
 //require('dotenv').config()
-const fetch = require('node-fetch');
+const wakeDyno = require("woke-dyno");
 
 
 process.env["TELEGRAM_API_TOKEN"] = process.env.BOT_TOKEN;
@@ -88,10 +88,15 @@ bot.onText(/\/yo/, (msg, match) => {
 bot.onText(/\/rating/, (msg, match) => {
     dbSt.find({ "username": msg.chat.username }, (err, docs) => {
         if (err) {
-            bot.sendMessage(msg.chat.id, "No data");
+            bot.sendMessage(msg.chat.id, "Error: " + err);
         }
         else {
-            bot.sendMessage(msg.chat.id, `Your current rating is: ${docs[0].rating}`);
+            if (docs.length > 0) {
+                bot.sendMessage(msg.chat.id, `Your current rating is: ${docs[0].rating}`);
+            }
+            else {
+                bot.sendMessage(msg.chat.id, "No student with such username");
+            }
         }
     });
 });
@@ -99,12 +104,17 @@ bot.onText(/\/rating/, (msg, match) => {
 bot.onText(/\/hws/, (msg, match) => {
     dbLs.find({}, (err, docs) => {
         if (err) {
-            bot.sendMessage(msg.chat.id, "No data");
+            bot.sendMessage(msg.chat.id, "Error: " + err);
         }
         else {
-            for (let doc of docs) {
-                let text = `Deadline: ${doc.homework.deadline} \nURL: ${doc.homework.url}`;
-                bot.sendMessage(msg.chat.id, text, {"parse_mode": "HTML"});
+            if (docs.length > 0) {
+                for (let doc of docs) {
+                    let text = `Deadline: ${doc.homework.deadline} \nURL: ${doc.homework.url}`;
+                    bot.sendMessage(msg.chat.id, text, {"parse_mode": "HTML"});
+                }
+            } 
+            else {
+                bot.sendMessage(msg.chat.id, "No such data");
             }
         }
     });
@@ -113,12 +123,17 @@ bot.onText(/\/hws/, (msg, match) => {
 bot.onText(/\/hw ([0-9]{1,2})/, (msg, match) => {
     dbLs.find({"homework.id": `hw${match[1]}`}, (err, docs) => {
         if (err) {
-            bot.sendMessage(msg.chat.id, "No data");
+            bot.sendMessage(msg.chat.id, "Error: " + err);
         }
         else {
-            for (let doc of docs) {
-                let text = `Deadline: ${doc.homework.deadline} \nURL: ${doc.homework.url}`;
-                bot.sendMessage(msg.chat.id, text, {"parse_mode": "HTML"});
+            if (docs.length > 0) {
+                for (let doc of docs) {
+                    let text = `Deadline: ${doc.homework.deadline} \nURL: ${doc.homework.url}`;
+                    bot.sendMessage(msg.chat.id, text, {"parse_mode": "HTML"});
+                }
+            }
+            else {
+                bot.sendMessage(msg.chat.id, "No such data");
             }
         }
     });
@@ -127,43 +142,20 @@ bot.onText(/\/hw ([0-9]{1,2})/, (msg, match) => {
 bot.onText(/\/last/, (msg, match) => {
     dbLs.find({}).sort({"homework.deadline": -1}).limit(1).exec((err, docs) => {
         if (err) {
-            bot.sendMessage(msg.chat.id, "No data");
+            bot.sendMessage(msg.chat.id, "Error: " + err);
         }
         else {
-            let text = `Deadline: ${docs[0].homework.deadline} \nURL: ${docs[0].homework.url} ${docs[0]._id}`;
-            bot.sendMessage(msg.chat.id, text, {"parse_mode": "HTML"});
+            if (docs.length > 0) {
+                let text = `Deadline: ${docs[0].homework.deadline} \nURL: ${docs[0].homework.url} ${docs[0]._id}`;
+                bot.sendMessage(msg.chat.id, text, {"parse_mode": "HTML"});
+            }
+            else {
+                bot.sendMessage(msg.chat.id, "No such data");
+            }
         }
     });
 });
 
 app.listen(PORT, () => {
-    wakeUpDyno("https://cs101bot.herokuapp.com/");
+    wakeDyno("https://cs101bot.herokuapp.com/").start();
 });
-
-const wakeUpDyno = (url, interval = 25, callback) => {
-    const milliseconds = interval * 60000;
-    setTimeout(() => {
-        try { 
-            console.log(`setTimeout called.`);
-            fetch(url).then(() => console.log(`Fetching ${url}.`)); 
-        }
-        catch (err) { // catch fetch errors
-            console.log(`Error fetching ${url}: ${err.message} 
-            Will try again in ${interval} minutes...`);
-        }
-        finally {
-
-            try {
-                callback(); // execute callback, if passed
-            }
-            catch (e) { // catch callback error
-                callback ? console.log("Callback failed: ", e.message) : null;
-            }
-            finally {
-                // do it all again
-                return wakeUpDyno(url, interval, callback);
-            }
-        }
-    }, milliseconds);
-};
-
